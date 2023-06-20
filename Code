@@ -1,0 +1,114 @@
+#data manipulation
+import numpy as np
+import pandas as pd
+
+#visulisations
+%matplotlib inline
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#for displaying all columns in a dataframe
+pd.set_option('display.max_columns', None)
+
+#for data modeling
+from xgboost import XGBClassifier
+from xgboost import XGBRegressor
+from xgboost import plot_importance
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+# for metrics and helpful functions
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score,\
+f1_score, confusion_matrix, ConfusionMatrixDisplay, classification_report
+from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.tree import plot_tree
+
+#for saving models
+import pickle
+
+df0 = pd.read_csv("HR_capstone_dataset.csv")
+
+########################### DATA EXPLORATION P1 #############################
+
+df0.head()
+df0.info()
+df0.describe()
+
+#rename the columns for convenience
+df0.columns
+df0 = df0.rename(columns={'Work_accident': 'work_accident',
+                          'average_montly_hours': 'average_monthly_hours',
+                          'time_spend_company': 'tenure',
+                          'Department': 'department'})
+#check for missing values
+df0.isna().sum()
+
+#check for duplicates
+df0.duplicated().sum()
+df0[df0.duplicated()].head()
+df1 = df0.drop_duplicates(keep='first')
+df1.head()
+
+#check for outliers
+plt.figure(figsize=(6,6))
+plt.title('Boxplot to detect outliers for tenure', fontsize=12)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+sns.boxplot(x=df1['tenure'])
+plt.show()
+
+#since there are outliers in the tenure, search how many rows contain outliers in the Tenure Column
+percentile25 = df1['tenure'].quantile(0.25)
+percentile75 = df1['tenure'].quantile(0.75)
+iqr = percentile75 - percentile25
+upper_limit = percentile75 + 1.5 * iqr
+lower_limit = percentile25 - 1.5 * iqr
+print("Lower limit:", lower_limit)
+print("Upper limit:", upper_limit)
+outliers = df1[(df1['tenure'] > upper_limit) | (df1['tenure'] < lower_limit)]
+print("Number of rows in the data containing outliers in `tenure`:", len(outliers))
+
+########################### DATA EXPLORATION P2 #############################
+#DATA VISUALISATION
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+
+#Boxplot
+sns.boxplot(data=df1, x='average_monthly_hours', y='number_project', hue='left', orient="h", ax=ax[0])
+ax[0].invert_yaxis()
+ax[0].set_title('Monthly hours by number of projects', fontsize='14')
+
+#histogram
+tenure_stay = df1[df1['left']==0]['number_project']
+tenure_left = df1[df1['left']==1]['number_project']
+sns.histplot(data=df1, x='number_project', hue='left', multiple='dodge', shrink=2, ax=ax[1])
+ax[1].set_title('Number of projects histogram', fontsize='14')
+
+plt.show()
+
+#confirm that employees with 7 projects left 
+df1[df1['number_project']==7]['left'].value_counts()
+
+#scatterplot to examine avg monthly hours vs satisfaction levels
+plt.figure(figsize=(16, 9))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='satisfaction_level', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', label='166.67 hrs./mo.', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by last evaluation score', fontsize='14');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
