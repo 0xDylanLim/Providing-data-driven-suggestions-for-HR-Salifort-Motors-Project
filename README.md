@@ -10,7 +10,17 @@ Objective: Analyse the data and build a model that predicts whether or not an em
 
 The first step of the EDA process is to examine and understand the data. This involves obtaining tables of information about the data, then checking for missing values, duplicates, and outliers.
 
-The next part of the EDA process is data exploration through visualizations. The following visualisations are made to further visualize the relationship between the variables in the data. These have been created using Python seaborn and matplotlib. 
+![Screenshot 2023-06-22 000827](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/2df434f3-dc46-449b-86c8-c5bb049209ec)
+
+This table shows the duplicates, however, there is no need to remove them as it seems unlikely that it would be due to human error. This is because the values vary despite having similar values.
+
+![Screenshot 2023-06-22 000648](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/2f2f2a35-d833-4059-bb08-3454700dd5bb)
+
+This shows that there are outliers, hence we identify how many rows in 'tenure' contain outliers. 
+
+![Screenshot 2023-06-22 001103](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/20261650-5680-402f-be26-0083d6ecd29c)
+
+The next part of the EDA process is data exploration through visualizations. The following visualizations are made to further visualize the relationship between the variables in the data. These have been created using Python Seaborn and Matplotlib. 
 
 The new variable tenure stayed = 0, is the employees who stayed compared to tenure_left = 1, and a boxplot was created.
 
@@ -30,6 +40,55 @@ Findings:
 1. Satisfaction levels were close to zero for those that left and worked 240 - 312 hours per month.
 2. There is another group that left with lower hours. This could indicate that they feel pressure to work more than their peers, hence lowering their satisfaction levels.
 3. Satisfaction levels were highest in those who left when hours ranged between 210 - 280 hours per month.
+
+Next, we create a boxplot and histogram on the satisfaction levels by tenure
+
+![Screenshot 2023-06-22 001419](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/0aabec5c-3d4a-44c2-bada-a86fc19143f8)
+
+Findings:
+1. employees who left either have: A. dissatisfied with short tenure OR B. satisfied with longer tenure
+2. 4-year tenure showed very low satisfaction for people who left.
+3. longest tenured employees didn't leave
+4. very few longer-tenured employees, possibly due to higher ranking and paid employees
+
+![Screenshot 2023-06-22 011125](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/82b09fc0-820b-4554-8011-e3af4954c3b5)
+
+The mean and median for those who left are much lower than those who didn't in terms of satisfaction levels.
+
+![Screenshot 2023-06-22 011306](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/0aa9f720-3f6e-4842-9000-94017532d3a2)
+
+By creating a histogram of salary vs tenure, we can differentiate if salary plays a large role.
+
+We can see if there is a correlation between long hours and receiving high evaluation scores via scatterplot.
+
+![Screenshot 2023-06-22 011551](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/976ab55b-78d1-483d-a485-c695cdda8af7)
+
+Findings:
+1. two groups: 1. overworked employees who performed well AND 2. under avg hour employees with lower evaluation scores
+2. appears to be a correlation between hours worked and evaluation score.
+3. most employees worked > 167 hours.
+
+![Screenshot 2023-06-22 012721](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/722a3397-3d1b-4fc3-8efb-a2b4fca4a345)
+
+Whilst investigating monthly hours by promotions we find:
+1. very few employees who were promoted in the last five years left
+2. very few employees who worked the most hours were promoted
+3. all of the employees who left were working the longest hours
+
+![Screenshot 2023-06-22 012938](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/447bb370-7884-4153-bf81-6fef5202570b)
+
+There is no significant difference between departments for people who left.
+
+Next, we will construct a logistic regression model to determine the likelihood that an employee will leave. This is under the assumptions:
+- Outcome variable is categorical
+- Observations are independent of each other
+- No severe multicollinearity among X variables
+- No extreme outliers
+- A linear relationship between each X variable and the logit of the outcome variable
+- Sufficiently large sample size
+
+
+
 
 
 
