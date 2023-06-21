@@ -97,18 +97,66 @@ plt.axvline(x=166.67, color='#ff6361', label='166.67 hrs./mo.', ls='--')
 plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
 plt.title('Monthly hours by last evaluation score', fontsize='14');
 
+#visualise satisfaction levels by tenure on a boxplot and histogram.
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+
+#boxplot
+sns.boxplot(data=df1, x='satisfaction_level', y='tenure', hue='left', orient="h", ax=ax[0])
+ax[0].invert_yaxis()
+ax[0].set_title('Satisfaction by tenure', fontsize='14')
+
+#histogram
+tenure_stay = df1[df1['left']==0]['tenure']
+tenure_left = df1[df1['left']==1]['tenure']
+sns.histplot(data=df1, x='tenure', hue='left', multiple='dodge', shrink=5, ax=ax[1])
+ax[1].set_title('Tenure histogram', fontsize='14')
+
+plt.show();
 
 
+#calculate mean and median satisfaction scores of employees who left and stayed.
+df1.groupby(['left'])['satisfaction_level'].agg([np.mean,np.median])
 
+#examine salary levels for different tenures.
+fig, ax = plt.subplots(1, 2, figsize = (22,8))
+tenure_short = df1[df1['tenure'] < 7]
+tenure_long = df1[df1['tenure'] > 6]
 
+#histogram for short tenure
+sns.histplot(data=tenure_short, x='tenure', hue='salary', discrete=1, 
+             hue_order=['low', 'medium', 'high'], multiple='dodge', shrink=.5, ax=ax[0])
+ax[0].set_title('Salary histogram by tenure: short-tenured people', fontsize='14')
 
+#histogram for long tenure
+sns.histplot(data=tenure_long, x='tenure', hue='salary', discrete=1, 
+             hue_order=['low', 'medium', 'high'], multiple='dodge', shrink=.4, ax=ax[1])
+ax[1].set_title('Salary histogram by tenure: long-tenured people', fontsize='14');
 
+#scatterplot of avg monthly hours vs last evaluation
+plt.figure(figsize=(16, 9))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='last_evaluation', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', label='166.67 hrs./mo.', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by last evaluation score', fontsize='14');
 
+#create a scatterplot graph to show whether employees who worked very long hours were promoted in the last five years.
+plt.figure(figsize=(16, 3))
+sns.scatterplot(data=df1, x='average_monthly_hours', y='promotion_last_5years', hue='left', alpha=0.4)
+plt.axvline(x=166.67, color='#ff6361', ls='--')
+plt.legend(labels=['166.67 hrs./mo.', 'left', 'stayed'])
+plt.title('Monthly hours by promotion last 5 years', fontsize='14');
 
+#show the distribution of the department of employees who left
+df1["department"].value_counts()
 
+#create a stacked histogram to compare the department distribution of employees who left to that of employees who didn't
+plt.figure(figsize=(11,8))
+sns.histplot(data=df1, x='department', hue='left', discrete=1, 
+             hue_order=[0, 1], multiple='dodge', shrink=.5)
+plt.xticks(rotation='45')
+plt.title('Counts of stayed/left by department', fontsize=14);
 
-
-
-
-
-
+#plot a correlation heatmap to check for strong correlations between variables in the data.
+plt.figure(figsize=(16, 9))
+heatmap = sns.heatmap(df0.corr(), vmin=-1, vmax=1, annot=True, cmap=sns.color_palette("vlag", as_cmap=True))
+heatmap.set_title('Correlation Heatmap', fontdict={'fontsize':14}, pad=12);
