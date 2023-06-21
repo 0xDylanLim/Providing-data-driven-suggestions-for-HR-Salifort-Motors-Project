@@ -30,6 +30,7 @@ import pickle
 
 df0 = pd.read_csv("HR_capstone_dataset.csv")
 
+
 ########################### DATA EXPLORATION P1 #############################
 
 df0.head()
@@ -70,7 +71,9 @@ print("Upper limit:", upper_limit)
 outliers = df1[(df1['tenure'] > upper_limit) | (df1['tenure'] < lower_limit)]
 print("Number of rows in the data containing outliers in `tenure`:", len(outliers))
 
+
 ########################### DATA EXPLORATION P2 #############################
+
 #DATA VISUALISATION
 fig, ax = plt.subplots(1, 2, figsize = (22,8))
 
@@ -112,7 +115,6 @@ sns.histplot(data=df1, x='tenure', hue='left', multiple='dodge', shrink=5, ax=ax
 ax[1].set_title('Tenure histogram', fontsize='14')
 
 plt.show();
-
 
 #calculate mean and median satisfaction scores of employees who left and stayed.
 df1.groupby(['left'])['satisfaction_level'].agg([np.mean,np.median])
@@ -160,3 +162,51 @@ plt.title('Counts of stayed/left by department', fontsize=14);
 plt.figure(figsize=(16, 9))
 heatmap = sns.heatmap(df0.corr(), vmin=-1, vmax=1, annot=True, cmap=sns.color_palette("vlag", as_cmap=True))
 heatmap.set_title('Correlation Heatmap', fontdict={'fontsize':14}, pad=12);
+
+
+############################################### MODEL BUILDING ##########################################
+
+#LOGISTIC REGRESSION MODEL
+#convert categorical to numerical
+df_enc = pd.get_dummies(df1, prefix=['salary', 'dept'], columns = ['salary', 'department'], drop_first=False)
+df_enc.head()
+
+#check how correlated variables are via heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(df_enc[['satisfaction_level', 'last_evaluation', 'number_project', 'average_monthly_hours', 'tenure']].corr(), annot=True, cmap="crest")
+plt.title('Heatmap of the dataset')
+plt.show()
+
+# stacked bar plot - show n.o employees across departments, comparing left vs didnt leave
+pd.crosstab(df1["department"], df1["left"]).plot(kind ='bar',color='mr')
+plt.title('Counts of employees who left versus stayed across department')
+plt.ylabel('Employee count')
+plt.xlabel('Department')
+plt.show()
+
+#remove outliers from tenure
+df_logreg = df_enc[(df_enc['tenure'] >= lower_limit) & (df_enc['tenure'] <= upper_limit)]
+
+
+#MODEL BUILDING
+y = df_logreg['left']
+X = df_logreg[['satisfaction_level', 'last_evaluation', 'number_project', 'average_monthly_hours', 'tenure', 'work_accident', 'promotion_last_5years', 
+               'salary_high', 'salary_low', 'salary_medium' , 'dept_IT', 'dept_RandD', 'dept_accounting', 'dept_hr', 'dept_management', 'dept_marketing', 
+               'dept_product_mng', 'dept_sales', 'dept_support', 'dept_technical']]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+log_clf = LogisticRegression(random_state=42, max_iter=500).fit(X_train, y_train)
+y_pred = log_clf.predict(X_test)
+
+#create confusion matrix
+log_cm = confusion_matrix(y_test, y_pred, labels=log_clf.classes_)
+log_disp = ConfusionMatrixDisplay(confusion_matrix=log_cm, display_labels=log_clf.classes_)
+log_disp.plot()
+plt.show()
+
+#check class balance in data or value counts in left column.
+df_logreg['left'].value_counts(normalize=True)
+
+#classification report 
+target_names = ['Predicted would not leave', 'Predicted would leave']
+print(classification_report(y_test, y_pred, target_names=target_names))
