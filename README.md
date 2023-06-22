@@ -87,6 +87,16 @@ Next, we will construct a logistic regression model to determine the likelihood 
 - A linear relationship between each X variable and the logit of the outcome variable
 - Sufficiently large sample size
 
+First, we use one-hot encoding to convert categorical variables to numerical ones. Then create a heatmap to consider variables of interest.
+
+![Screenshot 2023-06-22 140521](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/b7a674bd-73ef-4821-92c2-8d9645449363)
+
+
+
+
+
+
+
 
 
 
