@@ -91,19 +91,22 @@ First, we use one-hot encoding to convert categorical variables to numerical one
 
 ![Screenshot 2023-06-22 140521](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/b7a674bd-73ef-4821-92c2-8d9645449363)
 
+We can visualize the n.o employees across the departments.
 
+![Screenshot 2023-06-25 164906](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/72d6133d-8126-4ec6-9cc9-3d99a1a83047)
 
+Next, we must remove the outliers and isolate the outcome variable that we want our model to predict. Consider variables that predict the outcome variable. Then split the data into training and test set.
 
+Ultimately, a confusion matrix is produced.
 
+![Screenshot 2023-06-25 165132](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/defa082a-800f-4b65-830e-adc0f66776d3)
 
+When we check the class balance, it shows an 83%-17% split which is not too perfectly balanced and imbalanced.
 
+![Screenshot 2023-06-25 165219](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/9b542985-053e-4101-9900-82a86b9bb4de)
 
+Lastly, a classification report is created for the logistic regression model.
 
+![Screenshot 2023-06-25 165308](https://github.com/0xDylanLim/Providing-data-driven-suggestions-for-HR-Salifort-Motors-Project/assets/98394792/d6b7c953-9894-4bdf-92cc-f9abfc46fa66)
 
-
-
-
-
-
-
-
+The classification report above shows that the logistic regression model achieved a precision of 80%, recall of 83%, f1-score of 80% (all weighted averages), and accuracy of 83%.
